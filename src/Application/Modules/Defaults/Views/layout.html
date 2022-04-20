@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Api Stats Portal</title>
+
+    <link href="{{ base_url }}/assets/dist/css/index.css?{{ config.asset_version }}" rel="stylesheet" type="text/css" />
+
+    {% block headers %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Fixed navbar -->
+    <div class="header">
+        {% if menu_main is defined and menu_main %}
+            {{ DisplayMenu(menu_main) }}
+        {% endif %}
+    </div>
+
+    <div class="content-wrapper">
+
+        <div class="content" id="page-contents">
+            <div class="content-header">
+                {% if page_title is defined and page_title %}
+                <div class="container-fluid">
+                    <h3>{{ page_title }}</h3>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="container">
+                {% block content %}{% endblock%}
+            </div>
+
+            <div class="container-fluid">
+                {% block content_fluid %}{% endblock%}
+            </div>
+        </div>
+    </div>
+
+    {% if config.debug == true %}
+        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/vendors.bundle.js?{{ config.asset_version }}"></script>
+        <!-- <script type="text/javascript" src="{{ base_url }}/assets/dist/js/common.bundle.js?{{ config.asset_version }}"></script> -->
+        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/base.bundle.js?{{ config.asset_version }}"></script>
+
+        {% if js_include %}
+        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/{{ js_include }}.bundle.js?{{ config.asset_version }}"></script>
+        {% endif %}
+    {% else %}
+        <script src="{{ base_url }}/assets/dist/js/vendors.min.js?{{ config.asset_version }}"></script>
+        <!-- <script src="{{ base_url }}/assets/dist/js/common.min.js?{{ config.asset_version }}"></script> -->
+        <script src="{{ base_url }}/assets/dist/js/base.min.js?{{ config.asset_version }}"></script>
+
+        {% if js_include %}
+        <script src="{{ base_url }}/assets/dist/js/{{ js_include }}.min.js?{{ config.asset_version }}"></script>
+        {% endif %}
+    {% endif %}
+
+    {% block footer %}
+        <footer class="footer main-footer">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between">
+                    <div class="copyright">© Api Stats Portal {{ ''|date('Y') }}</div>
+                    <div class="ms-auto me-4">
+                        <em class="small">{{ config.version }}</em>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    {% endblock%}
+
+    {% if config.debug %}
+        <pre class="footer-debug" style="margin: 0;"><strong>DEBUG</strong><br />{{ debugOutput()|raw }}</pre>
+    {% endif %}
+
+    {% block scripts %}{% endblock%}
+
+    <script>
+        if (typeof onReady === 'function') {
+            onReady();
+        } else if (typeof onReady === 'object') {
+            Object.keys(onReady).forEach(function (key) {
+                var func = onReady[key];
+                if (typeof func === 'function') {
+                    func();
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

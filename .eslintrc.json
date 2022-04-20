@@ -1,0 +1,81 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": "airbnb-base",
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "./src/Application/Public/assets/src/base/js/"
+                ]
+            }
+        }
+    },
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+        "$": "readonly",
+        "jQuery": "readonly",
+        "BASE_URL": "readonly",
+        "BASE_URI": "readonly",
+        "mainModule": "readonly",
+        "translateStrings": "readonly",
+        "APP_ENV": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-new": 0,
+        "indent": [
+            "error",
+            4
+        ],
+        "func-names": [
+            "off"
+        ],
+        "comma-dangle": [
+            "error",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "never"
+            }
+        ],
+        "prefer-arrow-callback": [
+            "off"
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true
+            }
+        ],
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": true,
+                "classes": false
+            }
+        ],
+        "max-classes-per-file": [
+            "error",
+            10
+        ],
+        "class-methods-use-this": [
+            "off"
+        ],
+        "no-param-reassign": [
+            2,
+            {
+                "props": false
+            }
+        ]
+    }
+}
