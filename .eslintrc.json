@@ -6,13 +6,14 @@
     "extends": "airbnb-base",
     "settings": {
         "import/resolver": {
-            "node": {
-                "paths": [
-                    "./src/Application/Public/assets/src/base/js/"
-                ]
+            "webpack": {
+                "config": "./webpack.config.js"
             }
         }
     },
+    "ignorePatterns": [
+        "/src/Application/Public/assets/src/one-ui/*"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",

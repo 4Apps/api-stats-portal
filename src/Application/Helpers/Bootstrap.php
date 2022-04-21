@@ -3,6 +3,7 @@
 use System\Modules\Core\Models\Config;
 use System\Modules\Presentation\Models\Menu\Menu;
 use Defaults\Data\MainMenu;
+use System\Modules\Core\Models\Load;
 use System\Modules\Utils\Models\Sessions\SessionsMongoDb;
 
 // Send content type and charset header
@@ -32,3 +33,10 @@ Menu::registerTwig();
 
 // Default menu
 Menu::registerMenu(new MainMenu());
+
+// Make sure we don't have anything weird here sent from the browser
+if (!empty($_COOKIE['color_theme'])) {
+    if (!in_array($_COOKIE['color_theme'], Config::$items['color_themes'])) {
+        $_COOKIE['color_theme'] = 'default';
+    }
+}

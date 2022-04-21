@@ -1,0 +1,17 @@
+// EDIT: Gints Murans 2020-04-22
+// Style Overrides
+.simplebar-scrollbar {
+    left: auto;
+    right: 2px;
+    width: 4px;
+}
+
+.simplebar-scrollbar::before {
+    left: 0;
+    right: 0;
+    background: $primary-darker;
+
+    .sidebar-dark #sidebar & {
+        background: $white;
+    }
+}

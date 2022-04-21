@@ -1,99 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"{{ cookie.color_theme ? (' class="theme-' ~ cookie.color_theme ~ '"')|raw }}>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+        <title>Api Stats Portal</title>
 
-    <title>Api Stats Portal</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+        <link href="{{ base_url }}/assets/dist/css/index.css?{{ config.asset_version }}" rel="stylesheet" type="text/css" />
 
-    <link href="{{ base_url }}/assets/dist/css/index.css?{{ config.asset_version }}" rel="stylesheet" type="text/css" />
+        {% block headers %}{% endblock %}
+    </head>
+    <body>
+        <div id="page-container" class="{{ cookie.dark_mode == 1 ? ' page-header-dark dark-mode' }}">
+            <header id="page-header">
+                <div class="content-header">
+                    <!-- Left Section -->
+                    <div class="d-flex align-items-center">
+                        <!-- Logo -->
+                        <a class="fw-semibold fs-5 tracking-wider text-dual me-3" href="{{ base_url }}">
+                            <i class="fa-solid fa-mountain me-2"></i> Api Stats
+                        </a>
+                        <!-- END Logo -->
+                    </div>
 
-    {% block headers %}{% endblock %}
-</head>
+                    <div class="ms-auto">
+                        {% if menu_main is defined and menu_main %}
+                            {{ DisplayMenu(menu_main) }}
+                        {% endif %}
+                    </div>
 
-<body>
-
-    <!-- Fixed navbar -->
-    <div class="header">
-        {% if menu_main is defined and menu_main %}
-            {{ DisplayMenu(menu_main) }}
-        {% endif %}
-    </div>
-
-    <div class="content-wrapper">
-
-        <div class="content" id="page-contents">
-            <div class="content-header">
-                {% if page_title is defined and page_title %}
-                <div class="container-fluid">
-                    <h3>{{ page_title }}</h3>
-                </div>
-                {% endif %}
-            </div>
-
-            <div class="container">
-                {% block content %}{% endblock%}
-            </div>
-
-            <div class="container-fluid">
-                {% block content_fluid %}{% endblock%}
-            </div>
-        </div>
-    </div>
-
-    {% if config.debug == true %}
-        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/vendors.bundle.js?{{ config.asset_version }}"></script>
-        <!-- <script type="text/javascript" src="{{ base_url }}/assets/dist/js/common.bundle.js?{{ config.asset_version }}"></script> -->
-        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/base.bundle.js?{{ config.asset_version }}"></script>
-
-        {% if js_include %}
-        <script type="text/javascript" src="{{ base_url }}/assets/dist/js/{{ js_include }}.bundle.js?{{ config.asset_version }}"></script>
-        {% endif %}
-    {% else %}
-        <script src="{{ base_url }}/assets/dist/js/vendors.min.js?{{ config.asset_version }}"></script>
-        <!-- <script src="{{ base_url }}/assets/dist/js/common.min.js?{{ config.asset_version }}"></script> -->
-        <script src="{{ base_url }}/assets/dist/js/base.min.js?{{ config.asset_version }}"></script>
-
-        {% if js_include %}
-        <script src="{{ base_url }}/assets/dist/js/{{ js_include }}.min.js?{{ config.asset_version }}"></script>
-        {% endif %}
-    {% endif %}
-
-    {% block footer %}
-        <footer class="footer main-footer">
-            <div class="container-fluid">
-                <div class="d-flex justify-content-between">
-                    <div class="copyright">© Api Stats Portal {{ ''|date('Y') }}</div>
-                    <div class="ms-auto me-4">
-                        <em class="small">{{ config.version }}</em>
+                    <div class="d-flex">
+                        <button
+                            type="button"
+                            id="color-scheme-toggler"
+                            class="btn btn-sm btn-alt-secondary ms-1{{ cookie.dark_mode == 1 ? ' active' }}"
+                        >
+                            <i class="far fa-moon"></i>
+                        </button>
+                        <div class="dropdown d-inline-block ms-1">
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-alt-secondary dropdown-toggle"
+                                id="sidebar-themes-dropdown"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i class="far fa-circle"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end fs-sm smini-hide border-0" aria-labelledby="sidebar-themes-dropdown">
+                                <!-- Color Themes -->
+                                {% for theme in config.color_themes %}
+                                    <a
+                                        class="dropdown-item d-flex align-items-center justify-content-between fw-medium theme-item{{ theme == cookie.color_theme ? ' active' }}"
+                                        data-theme="{{ theme }}"
+                                        href="#"
+                                    >
+                                        <span>{{ theme|capitalize }}</span>
+                                        <i class="fa fa-circle text-{{ theme }}"></i>
+                                    </a>
+                                {% endfor %}
+                                <!-- END Color Themes -->
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
-    {% endblock%}
+            </header>
 
-    {% if config.debug %}
-        <pre class="footer-debug" style="margin: 0;"><strong>DEBUG</strong><br />{{ debugOutput()|raw }}</pre>
-    {% endif %}
+            <main id="main-container">
+                <div class="content" id="page-contents">
+                    {% if page_title is defined and page_title %}
+                        <div class="bg-body-light">
+                            <div class="content content-full">
+                                <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-2">
+                                    <div class="flex-grow-1">
+                                        <h1 class="h3 fw-bold mb-2">
+                                            {{ page_title }}
+                                        </h1>
+                                        {% if page_description is defined and page_description %}
+                                            <h2 class="fs-base lh-base fw-medium text-muted mb-0">
+                                                {{ page_description }}
+                                            </h2>
+                                        {% endif %}
+                                    </div>
+                                    {% if page_breadcrumbs is defined and page_breadcrumbs %}
+                                        <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
+                                            <ol class="breadcrumb breadcrumb-alt">
+                                                {% for crumb in page_breadcrumbs %}
+                                                    <li class="breadcrumb-item">
+                                                        {% if crumb.url %}
+                                                            <a class="link-fx" href="{{ crumb.url }}">{{ crumb.title }}</a>
+                                                        {% else %}
+                                                            {{ crumb.title }}
+                                                        {% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ol>
+                                        </nav>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
 
-    {% block scripts %}{% endblock%}
+                    <div class="container">
+                        {% block content %}{% endblock%}
+                    </div>
 
-    <script>
-        if (typeof onReady === 'function') {
-            onReady();
-        } else if (typeof onReady === 'object') {
-            Object.keys(onReady).forEach(function (key) {
-                var func = onReady[key];
-                if (typeof func === 'function') {
-                    func();
-                }
-            });
-        }
-    </script>
-</body>
+                    <div class="container-fluid">
+                        {% block content_fluid %}{% endblock%}
+                    </div>
+                </div>
+            </main>
 
+            {% block footer %}
+                <footer id="page-footer" class="footer main-footer">
+                    <div class="content py-3">
+                        <div class="d-flex justify-content-between">
+                            <div class="copyright">© Api Stats Portal {{ ''|date('Y') }}</div>
+                            <div class="ms-auto me-4">
+                                <em class="small">{{ config.version }}</em>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            {% endblock%}
+
+            {% if config.debug %}
+                <pre class="footer-debug" style="margin: 0;"><strong>DEBUG</strong><br />{{ debugOutput()|raw }}</pre>
+            {% endif %}
+        </div>
+
+        {% if config.debug == true %}
+            <script type="text/javascript" src="{{ base_url }}/assets/dist/js/vendors.bundle.js?{{ config.asset_version }}"></script>
+            <!-- <script type="text/javascript" src="{{ base_url }}/assets/dist/js/common.bundle.js?{{ config.asset_version }}"></script> -->
+            <script type="text/javascript" src="{{ base_url }}/assets/dist/js/base.bundle.js?{{ config.asset_version }}"></script>
+
+            {% if js_include %}
+            <script type="text/javascript" src="{{ base_url }}/assets/dist/js/{{ js_include }}.bundle.js?{{ config.asset_version }}"></script>
+            {% endif %}
+        {% else %}
+            <script src="{{ base_url }}/assets/dist/js/vendors.min.js?{{ config.asset_version }}"></script>
+            <!-- <script src="{{ base_url }}/assets/dist/js/common.min.js?{{ config.asset_version }}"></script> -->
+            <script src="{{ base_url }}/assets/dist/js/base.min.js?{{ config.asset_version }}"></script>
+
+            {% if js_include %}
+            <script src="{{ base_url }}/assets/dist/js/{{ js_include }}.min.js?{{ config.asset_version }}"></script>
+            {% endif %}
+        {% endif %}
+
+        {% block scripts %}{% endblock%}
+
+        <script>
+            if (typeof onReady === 'function') {
+                onReady();
+            } else if (typeof onReady === 'object') {
+                Object.keys(onReady).forEach(function (key) {
+                    var func = onReady[key];
+                    if (typeof func === 'function') {
+                        func();
+                    }
+                });
+            }
+        </script>
+    </body>
 </html>

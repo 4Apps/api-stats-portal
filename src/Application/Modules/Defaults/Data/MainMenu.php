@@ -23,6 +23,16 @@ class MainMenu extends Menu
             //         return Router::$method == 'example';
             //     }
             // ],
+            // 'example2' => [
+            //     'title' => 'Example 2',
+            //     'url' => '%base_url/defaults/welcome/example',
+            //     'show' => function () {
+            //         return Config::$items['debug'] == true;
+            //     },
+            //     'active' => function () {
+            //         return Router::$method == 'example';
+            //     }
+            // ],
         ];
     }
 }

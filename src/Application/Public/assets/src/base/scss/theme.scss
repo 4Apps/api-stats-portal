@@ -1,16 +1,39 @@
-body {
-    color: #495057;
+html {
+    background-color: $body-bg;
+
+    @media (prefers-color-scheme: dark) {
+        background-color: darken($primary-darker, 3%);
+    }
 }
-footer.main-footer {
-    background: #f1f1f1;
-    padding: 20px 25px;
-    margin-top: 100px;
+
+.hr-b {
+    border-bottom: 1px solid #bdc6ca;
+
+    .dark-mode & {
+        border-bottom: 1px solid #384960;
+    }
 }
+
 .footer-debug {
-    background: #f1f1f1;
     padding: 20px 25px;
 }
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+// Specific components
+.statistics-tables {
+    font-size: 0.75rem;
+
+    .table thead th {
+        font-size: 0.75rem;
+    }
+
+    .time-type-day {
+        font-size: 0.9rem;
+    }
+    .time-type-hour {
+        font-size: 0.85rem;
+    }
 }

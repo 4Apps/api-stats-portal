@@ -21,6 +21,10 @@ const config = {
     },
     resolve: {
         alias: {
+            oneui: path.resolve(
+                __dirname,
+                'src/Application/Public/assets/src/one-ui/_js/main'
+            ),
             utils: path.resolve(
                 __dirname,
                 'src/Application/Public/assets/src/base/js/utils.js'
@@ -80,7 +84,13 @@ const config = {
     stats: {
         colors: true,
     },
-    plugins: [new ESLintPlugin()],
+    plugins: [
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/,
+        }),
+        new ESLintPlugin(),
+    ],
     devtool: 'source-map',
     watchOptions: {
         ignored: /node_modules/,
