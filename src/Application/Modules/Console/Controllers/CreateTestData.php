@@ -32,8 +32,8 @@ class CreateTestData
         // Mark time
         Timers::markTime('Checked collection');
 
-        // Load api event data
-        $filename = 'api_event_log.json';
+        // Load api_stats_export.json file
+        $filename = 'api_stats_export.json';
         $fileContents = file_get_contents(APP_MODULES_PATH . '/Console/Files/' . $filename);
         if (empty($fileContents)) {
             throw new ErrorMessage("File {$filename} is empty");
@@ -42,42 +42,17 @@ class CreateTestData
         // Mark time
         Timers::markTime("Loaded file {$filename}");
 
-        $dataToInsert = [];
-        $fileContents = explode("\n", $fileContents);
-        foreach ($fileContents as $line) {
-            $line = trim($line);
-            if (empty($line)) {
-                continue;
-            }
+        $exportData = json_decode($fileContents, true);
 
-            $dataToInsert[] = json_decode($line, true);
-        }
-        $apiStats->statisticsDb->api_event_log->insertMany($dataToInsert);
+        // Mark time
+        Timers::markTime("Decoded json file {$filename}");
+
+        $apiStats->statisticsDb->api_event_log->insertMany($exportData['api_event_log']);
 
         // Mark time
         Timers::markTime('Inserted api_event_log data');
 
-        // Load api time data
-        $filename = 'api_time_log.json';
-        $fileContents = file_get_contents(APP_MODULES_PATH . '/Console/Files/' . $filename);
-        if (empty($fileContents)) {
-            throw new ErrorMessage("File {$filename} is empty");
-        }
-
-        // Mark time
-        Timers::markTime("Loaded file {$filename}");
-
-        $dataToInsert = [];
-        $fileContents = explode("\n", $fileContents);
-        foreach ($fileContents as $line) {
-            $line = trim($line);
-            if (empty($line)) {
-                continue;
-            }
-
-            $dataToInsert[] = json_decode($line, true);
-        }
-        $apiStats->statisticsDb->api_time_log->insertMany($dataToInsert);
+        $apiStats->statisticsDb->api_time_log->insertMany($exportData['api_time_log']);
 
         // Mark time
         Timers::markTime('Inserted api_time_log data');

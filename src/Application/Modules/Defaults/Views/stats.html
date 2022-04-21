@@ -18,6 +18,16 @@
                     <div class="input-group-text"><span class="far fa-calendar-alt"></span></div>
                 </div>
             </div>
+            <div class="ms-4">
+                <select class="form-select" name="timezone" id="timezone">
+                    {% for timezone in list_of_timezones %}
+                        <option value="{{ timezone }}"{{ timezone == session.timezone  ? ' selected="selected"' }}>{{ timezone }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ms-4">
+                <a href="{{ controller_url }}/export/{{ date_formatted }}" class="btn btn-primary">Export</a>
+            </div>
         </div>
     </div>
 

@@ -3,6 +3,7 @@
 use System\Modules\Core\Models\Config;
 use System\Modules\Presentation\Models\Menu\Menu;
 use Defaults\Data\MainMenu;
+use System\Modules\Utils\Models\Sessions\SessionsMongoDb;
 
 // Send content type and charset header
 header('Content-type: text/html; charset=utf-8');
@@ -17,6 +18,14 @@ header('Content-type: text/html; charset=utf-8');
 $client = new \MongoDB\Client(Config::$items['db']['mongo']['default']['string']);
 Config::$items['mdb_conn'] = $client;
 Config::$items['mdb_db'] = $client->{Config::$items['db']['mongo']['default']['dbname']};
+
+// Init session
+$sessions = new SessionsMongoDb(
+    Config::$items['db']['mongo']['default']['string'],
+    Config::$items['db']['mongo']['default']['dbname']
+);
+$sessions->register();
+$sessions->start();
 
 // register twig functions
 Menu::registerTwig();

@@ -11,7 +11,7 @@ Portal uses MongoDB as data store.
 
 1. `python3 -m pip install -r requirements.txt`
 2. `fab docker.install`
-3. `docker compose exec develop bash` and `php -f /srv/sites/web/src/Application/Public/index.php -- --query /console/create-test-data`
+3. `docker compose exec develop bash` and `php staticphp console/create-test-data`
 4. Open localhost:5700 in browser.
 
 ### Deployment

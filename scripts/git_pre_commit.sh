@@ -13,7 +13,6 @@ TRACKING_REMOTE="`git config branch.$LOCAL_BRANCH.remote`"
 TRACKING_BRANCH="$TRACKING_REMOTE/$LOCAL_BRANCH"
 
 
-
 # Test non-ascii filenames
 echo "*Testing non-ascii filenames.. "
 if [ $(git diff --cached --name-only --diff-filter=A -z $COMMIT | LC_ALL=C tr -d '[ -~]\0' | wc -c) -gt 0 ]; then
@@ -30,7 +29,6 @@ echo " Done"
 echo
 
 
-
 # Test for whitespace errors
 echo "*Testing for whitespace errors.. "
 git diff-index --cached --check $COMMIT --
@@ -42,7 +40,6 @@ echo " Done"
 echo
 
 
-
 # Test for most common debug symbols
 #echo "*Testing for debug symbols.. "
 #if [ "$(git diff --cached $COMMIT | grep -P 'print_r|console\\.log')" != "" ]; then
@@ -52,7 +49,6 @@ echo
 #fi
 #echo " Done"
 #echo
-
 
 
 # Trying to compile all php files
@@ -68,64 +64,6 @@ if [ $(git diff-index --cached --name-only --diff-filter=ACMR $COMMIT | grep \\.
         fi
     done
 
-    echo " Done"
-    echo
-fi
-
-
-
-# Compile css, js
-if [ $(git diff-index --cached --name-only $COMMIT | grep \\.js | wc -l) -gt 0 ]; then
-    echo "*JS file(s) modified, compressing.. "
-    cd $BASE_PATH
-    npm run js:build
-
-    if [ "$?" != "0" ]; then
-        echo
-        echo "Something went wrong while trying to minify css or javascript.."
-        echo
-        exit 1
-    fi
-
-    echo " Done"
-    echo
-fi
-
-
-
-# Dump sql schema
-#echo "*Dumping database schema .. "
-#if [ "$PLATFORM" = "Linux" ]; then
-#   sudo -u postgres pg_dump --schema-only --no-owner pm > "$BASE_PATH/Application/Files/db_schema.sql"
-#elif [ "$PLATFORM" = "FreeBSD" ]; then
-#   sudo -u pgsql pg_dump --schema-only --no-owner --no-privileges pm > "$BASE_PATH/Application/Files/db_schema.sql"
-#fi
-
-#git add "$BASE_PATH/Application/Files/db_schema.sql"
-#echo " Done"
-#echo
-
-
-
-# Check git remote changes
-if [ "$TRACKING_REMOTE" != "" ]; then
-    echo "*Checking git remote changes.. "
-
-    git fetch > /dev/null
-    git merge --no-commit --no-ff --quiet $TRACKING_BRANCH > /dev/null 2>&1
-
-    if [ "$?" != "0" ]; then
-        echo
-        echo "Remote repository has some new updates that conflicts with your changes. Stash your files first, then do 'git merge $TRACKING_BRANCH' and then apply stash by 'git stash pop'"
-        echo
-        exit 1
-    fi
-
-    echo " Done"
-    echo
-
-    echo "*Merging latest remote changes.. "
-    git merge $TRACKING_BRANCH --no-edit --quiet
     echo " Done"
     echo
 fi

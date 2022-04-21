@@ -2,10 +2,13 @@
 
 namespace Defaults\Controllers;
 
+use DateTimeZone;
 use System\Modules\Core\Controllers\Controller;
+use System\Modules\Core\Exceptions\ErrorMessage;
 use System\Modules\Core\Models\Config;
 use System\Modules\Core\Models\Timers;
 use FourApps\ApiStats as ApiStatsModel;
+use System\Modules\Core\Models\Router;
 
 class Stats extends Controller
 {
@@ -141,6 +144,89 @@ class Stats extends Controller
         // Mark time
         Timers::markTime('Before views');
 
+        // Show the view
+        $viewData['list_of_timezones'] = DateTimeZone::listIdentifiers();
         self::render(['stats.html'], $viewData);
+    }
+
+    public static function setTimezone($timezone)
+    {
+        $timezone = str_replace('--', '/', $timezone);
+
+        $list_of_timezones = DateTimeZone::listIdentifiers();
+        if (!in_array($timezone, $list_of_timezones)) {
+            throw new ErrorMessage('Invalid timezone');
+        }
+
+        $_SESSION['timezone'] = $timezone;
+        Router::redirect(self::$controller_url, false);
+    }
+
+    /**
+     *  Export
+     */
+    public static function export($date = null)
+    {
+        if (empty($date)) {
+            throw new ErrorMessage('No date specified');
+        }
+
+        $date = strtotime($date);
+        $interval_from = strtotime("today", $date);
+        $interval_to = $interval_from + 86399;
+
+        // Init connection to mongodb
+        $apiStats = new ApiStatsModel(Config::$items['db']['mongo']['default']);
+
+        // Get time stats
+        $filter = [
+            'start_time' => [
+                '$gte' => $interval_from,
+                '$lte' => $interval_to
+            ],
+        ];
+        $options = [
+            'sort' => ['start_time' => 1, 'count' => -1],
+        ];
+        $tmp = $apiStats->statisticsDb->api_time_log->find(
+            $filter,
+            $options
+        );
+        $timeStats = [];
+        foreach ($tmp as $item) {
+            $itemArr = (array)$item;
+            $timeStats[] = $itemArr;
+        }
+
+        // Get api events stats
+        $filter = [
+            'start_time' => [
+                '$gte' => $interval_from,
+                '$lte' => $interval_to
+            ]
+        ];
+        $options = [
+            'sort' => ['start_time' => 1, 'count' => -1],
+        ];
+        $tmp = $apiStats->statisticsDb->api_event_log->find(
+            $filter,
+            $options
+        );
+        $apiCallStats = [];
+        foreach ($tmp as $item) {
+            $itemArr = (array)$item;
+            $apiCallStats[] = $itemArr;
+        }
+
+        $exportData = [
+            'api_time_log' => $timeStats,
+            'api_event_log' => $apiCallStats,
+        ];
+        $exportData = json_encode($exportData);
+
+        $now_formatted = date('Y-m-d_H-i-s');
+        header("Content-disposition: attachment; filename=api_stats_export_{$now_formatted}.json");
+        header('Content-type: application/json');
+        echo $exportData;
     }
 }
