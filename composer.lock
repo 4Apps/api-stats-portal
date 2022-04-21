@@ -4,8 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eea42b6877a2aa0f0ec415417c2a1d5b",
+    "content-hash": "2e19c484c7eeb8d370f2a0902ba9c9a1",
     "packages": [
+        {
+            "name": "4apps/api-stats-php",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/4Apps/api-stats-php.git",
+                "reference": "f7ce6951b69a8e11019fe2c83dc6d15d3b3f0493"
+            },
+            "require": {
+                "mongodb/mongodb": "^1.11",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.8",
+                "phpunit/phpunit": "^9.0",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "default-branch": true,
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "FourApps\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gints Murans",
+                    "email": "gm@gm.lv"
+                }
+            ],
+            "description": "PHP library for Api stats portal",
+            "time": "2022-04-21T23:55:00+00:00"
+        },
         {
             "name": "jean85/pretty-package-versions",
             "version": "2.0.5",
@@ -530,42 +566,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "4apps/api-usage-php",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/4Apps/api-stats-php.git",
-                "reference": "b1e861c8acb22c72b8d2df724439d41dccd86363"
-            },
-            "require": {
-                "mongodb/mongodb": "^1.11",
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.8",
-                "phpunit/phpunit": "^9.0",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "default-branch": true,
-            "type": "project",
-            "autoload": {
-                "psr-4": {
-                    "FourApps\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gints Murans",
-                    "email": "gm@gm.lv"
-                }
-            ],
-            "description": "PHP library for Api usage portal",
-            "time": "2022-04-20T20:01:39+00:00"
-        },
         {
             "name": "composer/pcre",
             "version": "3.0.0",
@@ -4400,7 +4400,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "4apps/api-usage-php": 20
+        "4apps/api-stats-php": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
